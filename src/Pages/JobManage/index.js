@@ -61,11 +61,11 @@ function JobManage(){
     window.scrollTo(0, 0);
     const getUser = async ()=>{
       if(token){
-        const response = await fetchData(`http://localhost:3002/company?token=${token}`);
+        const response = await fetchData(`https://recruit-j7xv.onrender.com/company?token=${token}`);
         setUser(response[0]);
-        const response2 = await fetchData(`http://localhost:3002/jobs?idCompany=${response[0].id}`);
+        const response2 = await fetchData(`https://recruit-j7xv.onrender.com/jobs?idCompany=${response[0].id}`);
         setJ(response2);
-        const response3 = await fetchData(`http://localhost:3002/cv?idCompany=${response[0].id}`);
+        const response3 = await fetchData(`https://recruit-j7xv.onrender.com/cv?idCompany=${response[0].id}`);
         setCV(response3);
         setCVSource(response3.map((item,index)=>{
           return {
@@ -94,7 +94,7 @@ function JobManage(){
     }
     const getTag = async ()=>{
       if(token){
-        const response = await fetchData(`http://localhost:3002/tags`);
+        const response = await fetchData(`https://recruit-j7xv.onrender.com/tags`);
         setOptions(response.map((item)=>{
           return {
             label: item.name,
@@ -106,7 +106,7 @@ function JobManage(){
     }
     const getCity = async ()=>{
       if(token){
-        const response = await fetchData(`http://localhost:3002/city`);
+        const response = await fetchData(`https://recruit-j7xv.onrender.com/city`);
         setCity(response);
         setLoptions(response.map((item)=>{
           return {
@@ -117,7 +117,7 @@ function JobManage(){
       }
     }
     const getLastID = async ()=>{
-      const response = await fetchData(`http://localhost:3002/jobs`);
+      const response = await fetchData(`https://recruit-j7xv.onrender.com/jobs`);
       setLastID(response[response.length-1].id);
     }
 
@@ -134,14 +134,14 @@ function JobManage(){
   const handleSwitch = (checked,index) =>{
     const oldData = j[index.key];
     const id = oldData.id;
-    updateData('http://localhost:3002/jobs',id,{...oldData,status:checked});
+    updateData('https://recruit-j7xv.onrender.com/jobs',id,{...oldData,status:checked});
     setUpdate(!update)
   }
 
   const handleSwitch2 = (checked,index) =>{
     const oldData = cv[index.key];
     const id = oldData.id;
-    updateData('http://localhost:3002/cv',id,{...oldData,statusRead:checked});
+    updateData('https://recruit-j7xv.onrender.com/cv',id,{...oldData,statusRead:checked});
     setUpdate(!update)
   }
 
@@ -196,7 +196,7 @@ function JobManage(){
         description: values.description || edit.description,
         updateAt: time
       }
-        updateData('http://localhost:3002/jobs',newData.id,newData);
+        updateData('https://recruit-j7xv.onrender.com/jobs',newData.id,newData);
         setLoading(true);
         setTimeout(() => {
         setLoading(false);
@@ -276,7 +276,7 @@ function JobManage(){
     setCVD(cv[value.key]);
     const oldData = cv[value.key];
     const id = oldData.id;
-    updateData('http://localhost:3002/cv',id,{...oldData,statusRead:true});
+    updateData('https://recruit-j7xv.onrender.com/cv',id,{...oldData,statusRead:true});
     setUpdate(!update);
     setDatail(true);
   }
@@ -307,7 +307,7 @@ function JobManage(){
         description: values.description,
         updateAt: time
       }
-        addData('http://localhost:3002/jobs',newData);
+        addData('https://recruit-j7xv.onrender.com/jobs',newData);
         setLoading(true);
         setTimeout(() => {
         setLoading(false);

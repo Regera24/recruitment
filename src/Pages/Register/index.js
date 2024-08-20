@@ -11,7 +11,7 @@ function Register(){
 
   useEffect(()=>{
     const getData = async()=>{
-      const response = await fetchData('http://localhost:3002/company');
+      const response = await fetchData('https://recruit-j7xv.onrender.com/company');
       setData(response);
     }
     getData();
@@ -45,7 +45,7 @@ function Register(){
           name: values.username,
           id: last + 1
         }
-        addData('http://localhost:3002/company',newAcc);
+        addData('https://recruit-j7xv.onrender.com/company',newAcc);
         success();
         setTimeout(()=>{
           navigate('/login');

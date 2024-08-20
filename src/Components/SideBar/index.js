@@ -17,7 +17,7 @@ function SideBar(props){
   useEffect(()=>{
     const getUser = async ()=>{
       if(token){
-        const response = await fetchData(`http://localhost:3002/company?token=${token}`);
+        const response = await fetchData(`https://recruit-j7xv.onrender.com/company?token=${token}`);
         setUser(response[0]);
         console.log(response[0]);
       }

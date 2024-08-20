@@ -15,7 +15,7 @@ function DCompany(){
   useEffect(()=>{
     window.scrollTo(0, 0);
     const getCompany = async ()=>{
-      const response = await fetchData(`http://localhost:3002/company?id=${params.id}`);
+      const response = await fetchData(`https://recruit-j7xv.onrender.com/company?id=${params.id}`);
       setCompany(response[0]);
       form.setFieldsValue(response[0]);
     }

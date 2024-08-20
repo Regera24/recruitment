@@ -26,9 +26,9 @@ function Dashboard(){
     window.scrollTo(0, 0);
     const getUser = async ()=>{
       if(token){
-        const response = await fetchData(`http://localhost:3002/company?token=${token}`);
+        const response = await fetchData(`https://recruit-j7xv.onrender.com/company?token=${token}`);
         setUser(response[0]);
-        const response1 = await fetchData(`http://localhost:3002/jobs?idCompany=${response[0].id}`)
+        const response1 = await fetchData(`https://recruit-j7xv.onrender.com/jobs?idCompany=${response[0].id}`)
         setNumber({
           data: [
             {
@@ -58,9 +58,9 @@ function Dashboard(){
         }
         );
 
-        const response3 = await fetchData(`http://localhost:3002/jobs?idCompany=${response[0].id}`);
+        const response3 = await fetchData(`https://recruit-j7xv.onrender.com/jobs?idCompany=${response[0].id}`);
         setJob([response3]);
-        const response4 = await fetchData(`http://localhost:3002/cv?idCompany=${response[0].id}`);
+        const response4 = await fetchData(`https://recruit-j7xv.onrender.com/cv?idCompany=${response[0].id}`);
         setDa(response3.map((job,index)=>{
           let count = 0;
           for(let i =0 ; i < response4.length; i++){

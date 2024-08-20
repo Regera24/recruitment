@@ -25,7 +25,7 @@ function Login(){
   };
 
   const onFinish = async (values) =>{
-    const login = await checkLogin('http://localhost:3002/company',values.email, values.password);
+    const login = await checkLogin('https://recruit-j7xv.onrender.com/company',values.email, values.password);
     if(login){
       localStorage.setItem('token',login.token)
       success();

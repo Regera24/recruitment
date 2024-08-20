@@ -23,10 +23,10 @@ function Home(){
 
   useEffect(()=>{
     window.scrollTo(0, 0);
-    const api = 'http://localhost:3002/jobs';
-    const api2 = 'http://localhost:3002/company';
-    const api3 = 'http://localhost:3002/city';
-    const api4 = 'http://localhost:3002/tags';
+    const api = 'https://recruit-j7xv.onrender.com/jobs';
+    const api2 = 'https://recruit-j7xv.onrender.com/company';
+    const api3 = 'https://recruit-j7xv.onrender.com/city';
+    const api4 = 'https://recruit-j7xv.onrender.com/tags';
     const getData = async() =>{
       const response = await fetchData(api);
       setJob(response);

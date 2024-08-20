@@ -16,7 +16,7 @@ function User(){
   useEffect(()=>{
     window.scrollTo(0, 0);
     const getCompany = async ()=>{
-      const response = await fetchData(`http://localhost:3002/company?token=${token}`);
+      const response = await fetchData(`https://recruit-j7xv.onrender.com/company?token=${token}`);
       setCompany(response[0]);
       form.setFieldsValue(response[0]);
     }
@@ -49,7 +49,7 @@ function User(){
   };
 
   const handleFinish = async (values) =>{
-    const response = await updateData('http://localhost:3002/company',company.id,{...company,...values});
+    const response = await updateData('https://recruit-j7xv.onrender.com/company',company.id,{...company,...values});
     setSpin(true);
     if(response){
       setTimeout(()=>{

@@ -39,18 +39,18 @@ function Search(){
   useEffect(()=>{
     window.scrollTo(0, 0);
     const getData = async()=>{
-      const res = await fetchData(`http://localhost:3002/jobs?q=${keyword}`)
+      const res = await fetchData(`https://recruit-j7xv.onrender.com/jobs?q=${keyword}`)
       setJob(res);
       setDetail(res[0]);
-      const res2 = await fetchData(`http://localhost:3002/company?q=${keyword}`)
+      const res2 = await fetchData(`https://recruit-j7xv.onrender.com/company?q=${keyword}`)
       setCompany(res2);
-      const res3 = await fetchData(`http://localhost:3002/company`)
+      const res3 = await fetchData(`https://recruit-j7xv.onrender.com/company`)
       setCompany2(res3);
-      const res4 = await fetchData(`http://localhost:3002/city`)
+      const res4 = await fetchData(`https://recruit-j7xv.onrender.com/city`)
       setCity(res4);
-      const res5 = await fetchData(`http://localhost:3002/tags`)
+      const res5 = await fetchData(`https://recruit-j7xv.onrender.com/tags`)
       setTag(res5);
-      const res6 = await fetchData(`http://localhost:3002/cv`)
+      const res6 = await fetchData(`https://recruit-j7xv.onrender.com/cv`)
       setLastcv(res6.length+1);
     }
     getData();
@@ -75,7 +75,7 @@ function Search(){
       createAt: time,
     }
     setIsLoading(true);
-    const res = await addData('http://localhost:3002/cv',newCV);
+    const res = await addData('https://recruit-j7xv.onrender.com/cv',newCV);
     setTimeout(()=>{
       setIsLoading(false);
       setOpen(false);
