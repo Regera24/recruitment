@@ -1,12 +1,14 @@
-import { Badge, Avatar, Table, Tag, Switch, Button, Form, Input, Select, InputNumber, Row, Col, Spin, notification} from 'antd';
+import { Badge, Avatar, Switch, Button, notification} from 'antd';
 import {useState, useEffect} from 'react';
 import { fetchData, updateData, addData } from '../../Utils/Fetch';
 import './style.scss'
 import { useNavigate} from 'react-router-dom';
-import {
-  DollarOutlined,
-  CloseOutlined
-} from '@ant-design/icons';
+import JMTable from './JMTable';
+import Edit from './Edit';
+import Create from './Create';
+import CV from './CV';
+import Loading from './Loading';
+import CVTable from './CVTable';
 function JobManage(){
   const navigate = useNavigate();
   const [user, setUser] = useState();
@@ -59,6 +61,9 @@ function JobManage(){
 
   useEffect(()=>{
     window.scrollTo(0, 0);
+  },[])
+
+  useEffect(()=>{
     const getUser = async ()=>{
       if(token){
         const response = await fetchData(`https://recruit-j7xv.onrender.com/company?token=${token}`);
@@ -213,56 +218,6 @@ function JobManage(){
     }
   }
   
-  const columns = [
-    {
-      title:'Job Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title:'Offer',
-      dataIndex: 'salary',
-      key: 'salary',
-    },
-    {
-      title:'Tags',
-      dataIndex: 'tags',
-      key: 'tags',
-      render: tags => tags.map((item,index)=>{
-        return <Tag key={index} color='success'>{tagdata[item-1].name}</Tag>
-      })
-    },
-    {
-      title:'Location',
-      dataIndex: 'city',
-      key: 'city',
-      render: city => city.map((item,index)=>{
-        return <Tag key={index} color='success'>{citydata[item-1].name}</Tag>
-      })
-    },
-    {
-      title:'Create At',
-      dataIndex: 'createAt',
-      key: 'createAt',
-    },
-    {
-      title:'Last Update',
-      dataIndex: 'updateAt',
-      key: 'updateAt',
-    },
-    {
-      title: 'Status',
-      dataIndex:'status',
-      key:'status',
-      render: (status,index) => <Switch onChange={(checked)=>handleSwitch(checked,index)} checkedChildren="End" unCheckedChildren="Start" defaultChecked={status} />
-    },
-    {
-      title: 'Edit',
-      dataIndex:'edit',
-      key: 'edit',
-      render: (index,value)=> <Button onClick={()=>handleEdit(index,value)}>Edit</Button>
-    }
-  ];
 
   const handleCreate = ()=>{
     setModal2(true);
@@ -359,313 +314,44 @@ function JobManage(){
   ]
 
   return (
-    (user && job && tagdata && citydata ? 
       <div className='jobmanage'>
+        {(user && job && tagdata && citydata && cvsource && cv && j && columns2 ? 
+        <>
         {contextHolder}
        <div onClick={handleUser} className='jobmanage__user'>
           <Badge className='jobmanage__user__avt' color='green' dot size='default'> <Avatar className='jobmanage__user__avt__bg' size={50} src={user.img}></Avatar> </Badge>
           <h2 className='jobmanage__user__name'>{user.companyName}</h2>
         </div>
-        <div className='jobmanage__table'>
-          <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-            <h2 className='jobmanage__table__title'>Jobs List</h2>
-            <Button onClick={handleCreate} className='jobmanage__table__create'>Create Job</Button>
-          </div>
-          <div className='jobmanage__table__tb'>
-            <Table dataSource={job} columns={columns}></Table>
-          </div>
-        </div>
+
+        <JMTable job={job} handleCreate={handleCreate} handleEdit={handleEdit} handleSwitch={handleSwitch} tagdata={tagdata} citydata={citydata} />
 
         {
           (modal && edit) && (
-            <>
-              <div className='jobmanage__edit'>
-                <h2 className='jobmanage__edit__title'>Edit Job</h2>
-                <Form 
-                  onFinish={handleFinish}
-                  labelCol={{
-                    span: 3,
-                  }}
-                  wrapperCol={{
-                    span: 21,
-                  }}
-                >
-                  <Form.Item
-                    label='Job Name'
-                    name='name'
-                  >
-                    <Input defaultValue={edit.name}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Salary From'
-                    name='fromMon'
-                  >
-                    <InputNumber defaultValue={edit.fromMon} addonAfter={<DollarOutlined />}/> 
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Salary To'
-                    name='toMon'
-                  >
-                    <InputNumber defaultValue={edit.toMon} addonAfter={<DollarOutlined />}/> 
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Tags'
-                    name='tags'
-                  >
-                    <Select
-                      mode="multiple"
-                      placeholder="Please select job tags"
-                      options={options}
-                      allowClear
-                      defaultValue={edit.tags}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label='City'
-                    name='city'
-                  >
-                    <Select
-                      mode="multiple"
-                      placeholder="Please select locations"
-                      options={loptions}
-                      defaultValue={edit.city}
-                      allowClear
-                    />
-                  </Form.Item>
-                  
-                  <Form.Item
-                    label='Description'
-                    name='description'
-                  >
-                    <Input.TextArea defaultValue={edit.description} style={{height:'120px'}} />
-                  </Form.Item>
-                  
-                  <Row className='jobmanage__edit__inline'>
-                    <Col>
-                      <Form.Item>
-                        <Button onClick={handleClose} className='jobmanage__edit__inline__button'>Cancel</Button>
-                      </Form.Item>
-                    </Col>
-                    <Col>
-                      <Form.Item>
-                        <Button htmlType='submit' className='jobmanage__edit__inline__button'>Save Changes</Button>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Form>
-                <div onClick={handleClose} className='jobmanage__edit__close'>
-                  <CloseOutlined />
-                </div>
-            </div>
-        <div className='overlay'></div>
-            </>
+           <Edit edit={edit} handleClose={handleClose} handleFinish={handleFinish}  options={options} loptions={loptions}/>
           )
         }
         {
           (modal2 && lastID!=999) && (
-            <>
-              <div className='jobmanage__edit'>
-                <h2 className='jobmanage__edit__title'>Create Job</h2>
-                <Form 
-                  onFinish={handleFinish2}
-                  labelCol={{
-                    span: 4,
-                  }}
-                  wrapperCol={{
-                    span: 20,
-                  }}
-                >
-                  <Form.Item
-                    label='Job Name'
-                    name='name'
-                    rules={[{ required: true, message: 'Please input job name!' }]}
-                  >
-                    <Input/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Salary From'
-                    name='fromMon'
-                    rules={[{ required: true, message: 'Please input salary' }]}
-                  >
-                    <InputNumber addonAfter={<DollarOutlined />}/> 
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Salary To'
-                    name='toMon'
-                    rules={[{ required: true, message: 'Please input salary' }]}
-                  >
-                    <InputNumber addonAfter={<DollarOutlined />}/> 
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Tags'
-                    name='tags'
-                    rules={[{ required: true, message: 'Please select tags' }]}
-                  >
-                    <Select
-                      mode="multiple"
-                      placeholder="Please select job tags"
-                      options={options}
-                      allowClear
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Location'
-                    name='city'
-                    rules={[{ required: true, message: 'Please select location' }]}
-                  >
-                    <Select
-                      mode="multiple"
-                      placeholder="Please select locations"
-                      options={loptions}
-                      allowClear
-                    />
-                  </Form.Item>
-                  
-                  <Form.Item
-                    label='Description'
-                    name='description'
-                    rules={[{ required: true, message: 'Please input description' }]}
-                  >
-                    <Input.TextArea style={{height:'120px'}} />
-                  </Form.Item>
-                  
-                  <Row className='jobmanage__edit__inline'>
-                    <Col>
-                      <Form.Item>
-                        <Button onClick={handleClose2} className='jobmanage__edit__inline__button'>Cancel</Button>
-                      </Form.Item>
-                    </Col>
-                    <Col>
-                      <Form.Item>
-                        <Button htmlType='submit' className='jobmanage__edit__inline__button'>Create</Button>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Form>
-                <div onClick={handleClose2} className='jobmanage__edit__close'>
-                  <CloseOutlined />
-                </div>
-            </div>
-          <div className='overlay'></div>
-        </>
+            <Create modal2={modal2} options={options} loptions={loptions} handleClose2={handleClose2} handleFinish2={handleFinish2}/>
           )
         }
 
-        <div className='cvmanage'>
-          <h2 className='cvmanage__title'>CV List</h2>
-          <div className='cvmanage__table'>
-            {
-              (cvsource && cv && j) && <Table columns={columns2} dataSource={cvsource}></Table>
-            }
-          </div>
-        </div>
+        <CVTable columns2={columns2} cvsource={cvsource} cv={cv} j={j}/>
 
         {
           detail && (
-            <>
-              <div className='overlay'></div>
-              <div className='detail'>
-                <h2>Job details</h2>
-                <Form 
-                  labelCol={{
-                    span: 5,
-                  }}
-                  wrapperCol={{
-                    span: 19,
-                  }}
-                >
-                  <Form.Item
-                    label='Candidate Name'
-                    name='name'
-                  >
-                    <Input defaultValue={cvd.name}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Job Name'
-                    name='idJob'
-                  >
-                    <Input defaultValue={(j.filter((item)=>item.id===cvd.idJob))[0].name}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Phone'
-                    name='phone'
-                  >
-                    <Input defaultValue={cvd.phone}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Email'
-                    name='email'
-                  >
-                    <Input defaultValue={cvd.email}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Location'
-                    name='city'
-                  >
-                    <Input defaultValue={cvd.city}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Link Project'
-                    name='linkProject'
-                  >
-                    <Input defaultValue={cvd.linkProject}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Applied At'
-                    name='createAt'
-                  >
-                    <Input defaultValue={cvd.createAt}/>
-                  </Form.Item>
-
-                  <Form.Item
-                    label='Description'
-                    name='description'
-                  >
-                    <Input.TextArea defaultValue={cvd.description} style={{height:'120px'}} />
-                  </Form.Item>
-                  
-                  <Row className=''>
-                    <Col span={24} style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-                      <Form.Item>
-                        <Button onClick={handleClose3} className='detail__button'>Close</Button>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Form>
-                <div onClick={handleClose3} className='detail__close'>
-                  <CloseOutlined />
-                </div>
-              </div>
-            </>
+            <CV cvd={cvd} handleClose3={handleClose3} j={j}/>
           )
         }
 
         {
           loading && (
-            <>
-              <div className='overlay'></div>
-              <div className='spin'> <Spin size="large" /></div>
-            </>
+           <Loading/>
           )
         }
+        </>
+        : <Loading/> )}
     </div>
-    : 
-    <div></div>
-    )
   )
 }
 

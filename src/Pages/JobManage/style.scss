@@ -1,5 +1,6 @@
 @import '../../Color/root.scss';
 .jobmanage{
+  min-height: 100vh;
   position: relative;
   margin-top: 90px;
   padding: 20px;
@@ -135,6 +136,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.082);
+    min-height: 100vh;
 }
 .cvmanage{
   &__title{
